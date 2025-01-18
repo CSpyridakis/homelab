@@ -83,17 +83,21 @@ During my prompt experimentation, some modelfiles were created, which are availa
 
 --- 
 
-### 🖴 2. NAS 
-[TrueNAS]()
+### 🖴 2. Network attached storage (NAS) 
+As my main storage system, I have installed [TrueNAS Scale](https://www.truenas.com/) on an Intel NUC device. This way, I can access and store files from any device in my **Homelab** network, even from devices connected via VPN.
+
+To differentiate the access for services and users, multiple datasets have been created with different privileges.
+
+The NAS stores my files in a RAID configuration, providing redundancy in case of a failure of one of the storage disks.
 
 ![true nas screenshot](./doc/truenas.png)
 
 #### ⚙️ Services
-Among others like ([Jellyfin](), [Photoprism](), [Nextcloud](https://nextcloud.com/), etc, which are used )
+Every service related to storage runs on this device.
+First and foremost, there are services that handle my personal data, such as [Nextcloud](https://nextcloud.com/), [Jellyfin](https://jellyfin.org/), and [Photoprism](https://www.photoprism.app/) for my multimedia, etc.
 
-##### 1. [Gitea](https://about.gitea.com/)
-##### 2. [Distribution](https://distribution.github.io/distribution/)
-##### 3. [Pi-hole](https://pi-hole.net/)
+Then, there are other services related to the storage of code, containers, and more - on my premises. For this reason, I use [Gitea](https://about.gitea.com/) and [Distribution](https://distribution.github.io/distribution/).
+
 
 --- 
 
