@@ -101,13 +101,23 @@ Then, there are other services related to the storage of code, containers, and m
 
 --- 
 
+There are also some low-computation devices with limited capabilities that I use in my **Homelab**.
+
 ### 3. Intel NUC
+
+I have an Intel NUC device, more specifically a `NUC10i3FNH`, which runs `x86` experiments that, for various reasons, are more convenient to run outside of a VM. Or on a device like this, which can behave as an edge node in a particular application. This device runs `Ubuntu Server`, and its main specs are listed below.
+
 ![nuc device info](./doc/nuc.png)
 
 ### 4. Raspberry PI
+For experiments that need to run on an `ARM-based` system, a `Raspberry Pi` is also used in my Homelab. Similarly to the NUC device, it also runs `Ubuntu Server`.
+
 ![raspberry pi info](./doc/raspberry.png)
 
 ### 5. Jetson Nano
+
+Finally, for applications that require an embedded Linux system equipped with a GPU, I also have a `Jetson Nano`, which serves as my first point of experimentation in this field.
+
 ![jetson nano info](./doc/jetson-nano.png)
 
 --- 
