@@ -22,11 +22,27 @@ The core elements of my **Homelab**  are showcased in the following diagram. The
 
 ---
 
-## Router
+## 🌐 Router
+
+In my setup, three different routers are used, each with its own subnet and purpose:
+
+A. The first is my `ISP modem/router`, which provides network connectivity to all the apartments in my building.
+
+B. The second is my `Home network` router, which provides internet access to general home devices such as smart TVs, IP cameras, and sensors. It also hosts the guest network.
+
+C. Finally, there is my **Homelab** network router, which connects all the devices related to this project.
+
+Both my Home and **Homelab** routers are MikroTik routers, which means they can be strictly configured based on my needs.
+
+As can be easily inferred, my **Homelab** exists behind a NAT. However, for various reasons, I need to access my **Homelab** from anywhere in the world. One of my design rules, however, is to avoid exposing any services directly to the internet.
+
+To achieve this, I use one of the `VPN Services` along with the `IP Cloud` feature provided by `MikroTik` to create a VPN tunnel for secure access to my network. To complete the setup, the proper ports must also be forwarded through the other two routers.
+
+Below is a screenshot from `Winbox` that provides a general understanding of the **Homelab** network.
 
 ![Mikrotik Screenshot](./doc/mikrotik.png)
 
-## Internal network devices
+## **Homelab** devices
 
 ### 🖥️ 1. Main Server
 The role of my main server, at this point 
