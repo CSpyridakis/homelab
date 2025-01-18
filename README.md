@@ -22,7 +22,7 @@ The core elements of my **Homelab**  are showcased in the following diagram. The
 
 ---
 
-## 🌐 Router
+## 🌐 Routers
 
 In my setup, three different routers are used, each with its own subnet and purpose:
 
@@ -43,30 +43,41 @@ Below is a screenshot from `Winbox` that provides a general understanding of the
 ![Mikrotik Screenshot](./doc/mikrotik.png)
 
 ## **Homelab** devices
+Having explained the interconnection of devices, this section will describe the actual devices used and their purpose.
 
 ### 🖥️ 1. Main Server
-The role of my main server, at this point 
 
 #### Proxmox
-[Proxmox VE](https://www.proxmox.com/en/) is used as my [Τype 1](https://aws.amazon.com/compare/the-difference-between-type-1-and-type-2-hypervisors/) [Hypervisor](https://en.wikipedia.org/wiki/Hypervisor). 
+In my main processing device, I decided to run a [Τype 1](https://aws.amazon.com/compare/the-difference-between-type-1-and-type-2-hypervisors/) [Hypervisor](https://en.wikipedia.org/wiki/Hypervisor) in order to easily spawn Virtual Machines (VMs) based on my needs.
+
+For this purpose, [Proxmox VE](https://www.proxmox.com/en/) was selected. 
+
+To leverage the Nvidia GPU that my main server accommodates, actions were also taken to passthrough the GPU to the host.
 
 ![proxmox screenshot](./doc/proxmox.png)
 
 ##### 🖥️🖥️ A. Virtual Machines
-Multiple VMs are created using Proxmox to run experiments that follow [IaaS]() printiples before continuing experiments in other infrastructus, either private or public. 
+Using Proxmox, different VMs can be easily created, and services can be deployed on them to run experiments that follow [IaaS](https://en.wikipedia.org/wiki/Infrastructure_as_a_service) principles before continuing development or production activities in other infrastructures, whether private or public.
 
 ##### 🐳 B. Portainer
-The docker-compose files that have been used for some of the services, are available here: [https://github.com/CSpyridakis/dockerfiles](https://github.com/CSpyridakis/dockerfiles).
+One of my needs is related to container deployment. [Portainer](https://www.portainer.io/) is a widely used container management software; for this reason, Portainer is also deployed as an LXC and provides container management services when I need to test individual containers that are not part of a Kubernetes cluster or run services required in my network.
+
+The docker-compose files that are used to create my stacks are available here: [https://github.com/CSpyridakis/dockerfiles](https://github.com/CSpyridakis/dockerfiles).
 
 ![portainer screenshot](./doc/portainer.png)
 
-![gninx proxy manager screenshot](./doc/nginx-proxy-manager.png)
+##### Nginx Proxy manager
+Moreover, Nginx Proxy Manager is one of the containers that continuously runs on my main server. This way, I provide reverse proxy mechanism to my other services.
 
-[Duck DNS](https://www.duckdns.org/) is used to create the with the help of [Let's encrypt](https://letsencrypt.org/) for the Certificates.
+One option would be to define the hostnames of the services statically in the `/etc/hosts` file of my devices or in my router. However, this would require syncing this information between different machines and networks (if I decide to recreate a similar project elsewhere). For this reason, I chose to create a domain using [Duck DNS](https://www.duckdns.org/), which will have an `A record` that resolves to a private IP and can be updated once to run from everywhere. Finally, the option to create certificates using [Let's encrypt](https://letsencrypt.org/), which Nginx Proxy Manager provides, was used to add TLS for these services.
+
+![gninx proxy manager screenshot](./doc/nginx-proxy-manager.png)
 
 ##### C. Services
 ###### 🤖 C.1 [Ollama](https://ollama.com/)
-Moreover, modelfiles are available here: [https://github.com/CSpyridakis/modelfiles](https://github.com/CSpyridakis/modelfiles).
+Finally, on my Proxmox node, I run some services directly. These services are not part of a VM or container and are deployed directly on the host. The reason for this is ease of use, and because they are not meant to be uninstalled from the system. A main example is the Ollama server, which I use to provide LLM support and experiment with them.
+
+During my prompt experimentation, some modelfiles were created, which are available here: [https://github.com/CSpyridakis/modelfiles](https://github.com/CSpyridakis/modelfiles).
 
 ![ollama server screenshot](./doc/ollama-server.png)
 
