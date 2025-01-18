@@ -1,13 +1,78 @@
-# Homelab
+# 🏠 Homelab
+
+Technologies used:
+<!-- Proxmox -->
+<a href="https://www.proxmox.com/en/">
+    <img style="height: 25px" src="https://www.proxmox.com/images/proxmox/Proxmox_logo_standard_hex_400px.png#joomlaImage://local-images/proxmox/Proxmox_logo_standard_hex_400px.png?width=400&height=60" alt="Proxmox logo">
+</a>
+
+<!-- TrueNAS -->
+<a href="">
+    <img style="height: 25px" src="https://www.truenas.com/wp-content/uploads/2024/05/TrueNAS-Scale-Logo-small.png" alt="TrueNAS logo">
+</a>
+
+<!-- Portainer -->
+<a href="https://www.portainer.io/">
+    <img style="height: 30px" src="https://www.portainer.io/hubfs/portainer-logo-black.svg" alt="Portainer logo">
+</a>
+
+<!-- Homepage -->
+<a href="https://gethomepage.dev/">
+    <img style="height: 25px; background-color:rgb(43, 110, 245)" src="https://gethomepage.dev/assets/banner_light@2x.webp" alt="Homepage logo">
+</a>
+
+<!-- Raspberry Pi -->
+<a href="https://www.raspberrypi.com/">
+    <img style="height: 28px" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOZVY135z1l30pDAIknyG3FiOhAUnN-NeKiQ&s" alt="Raspberry Pi logo">
+</a>
+
+
+<!-- Mikrotik -->
+<a href="https://mikrotik.com/">
+    <img style="height: 25px" src="https://mikrotik.com/img/mtv2/newlogo.svg" alt="Mikrotik logo">
+</a>
+
+<!-- Ollama -->
+<a href="https://ollama.com/">
+    <img style="height: 28px; padding-left:5px" src="https://ollama.com/public/ollama.png" alt="Ollama logo">
+</a>
+
+<!-- Gitea -->
+<a href="https://about.gitea.com/">
+    <img style="height: 25px" src="https://about.gitea.com/gitea-text.svg" alt="Gitea logo">
+</a>
+
+<!-- Nginx Proxy manager-->
+<a href="https://nginxproxymanager.com/">
+    <img style="height: 30px" src="https://nginxproxymanager.com/logo.svg" alt="Nginx Proxy Manager logo">
+</a>
+
+<!-- Pi-hole -->
+<a href="https://pi-hole.net/">
+    <img style="height: 25px; background-color:rgb(162, 59, 59); padding-left:4px" src="https://pi-hole.net/wp-content/uploads/2023/05/pihole-logo-horizontal-white-e1683321640117.png" alt="Pi-hole logo">
+</a>
+
+<!-- Distribution -->
+<a href="https://distribution.github.io/distribution/">
+    <img style="height: 40px" src="https://distribution.github.io/distribution/brand.svg" alt="Distribution logo">
+</a>
+
+<!-- Next Cloud -->
+<a href="https://nextcloud.com/">
+    <img style="height: 35px; background-color:rgb(39, 205, 255)" src="https://nextcloud.com/c/uploads/2023/02/logo_nextcloud_white.svg" alt="Next Cloud  logo">
+</a>
+
+<!-- NVIDIA Jetson -->
+<a href="https://www.nvidia.com/en-eu/autonomous-machines/embedded-systems/">
+    <img style="height: 28px" src="https://upload.wikimedia.org/wikipedia/sco/2/21/Nvidia_logo.svg" alt=" logo">
+</a>
 
 ## General Notes
 This repository serves as the primary documentation point for my **Homelab**.
 
-The **Homelab** project is an on-premises infrastructure that accommodates the networks and devices I use for experimenting with new technologies or providing private area self-hosted services. This approach ensures that the data created is stored on proprietary devices, providing a safe testbed for learning, before applying similar principles in the field. 
+The **Homelab** is a personal project, more specifically is an on-premises private infrastructure that accommodates the networks and devices I use for experimenting with new technologies or providing private area self-hosted services. This approach ensures that the data created is stored on proprietary devices, providing a safe testbed for learning, before applying similar principles in the field. 
 
 In this repository: [https://github.com/CSpyridakis/notes](https://github.com/CSpyridakis/notes), you can find general notes on various technologies. Some of these notes are relevant to the creation and maintenance of this **Homelab**.
-
-*TODO:* In the future, this repository will also include relevant configuration files.
 
 For quick access and an at-a-glance overview of the **Homelab**'s status, I use the [homepage dashboard](https://github.com/gethomepage/homepage). You can find my configuration for this dashboard in the following repository: https://github.com/CSpyridakis/homepage.
 
