@@ -1,0 +1,10 @@
+---
+# ====================================================================
+# All nodes (Debian & Redhat, if exist any)
+# ====================================================================
+- name: Apply base configuration to all hosts
+  hosts: all
+  become: true
+  roles:
+    - base
+

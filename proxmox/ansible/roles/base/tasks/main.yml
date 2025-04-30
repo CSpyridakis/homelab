@@ -1,0 +1,6 @@
+- name: Install packages
+  package:
+    update_cache: yes
+    name:  "{{ item }}"
+  loop:
+    - curl
