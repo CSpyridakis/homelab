@@ -25,6 +25,18 @@
         name: prometheus-agent
       when: ansible_distribution in ["Ubuntu", "Debian"]
 # ====================================================================
+# Only K8s worker nodes
+# ====================================================================
+- name: Configure Kubernetes worker nodes
+  hosts: k8s-workers
+  become: true
+  tasks:
+    - name: Include k8s-worker role
+      include_role:
+        name: k8s-worker
+      when: ansible_distribution in ["Ubuntu", "Debian"]
+
+# ====================================================================
 # Prometheus and Grafana server
 # ====================================================================
 - name: Configure monitoring server
