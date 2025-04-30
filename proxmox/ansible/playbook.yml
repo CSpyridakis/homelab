@@ -8,3 +8,15 @@
   roles:
     - base
 
+# ====================================================================
+# Prometheus and Grafana server
+# ====================================================================
+- name: Configure monitoring server
+  hosts: prometheus-grafana-server
+  become: true
+  tasks:
+
+    - name: Include grafana-server role
+      include_role:
+        name: grafana-server
+      when: ansible_distribution in ["Ubuntu", "Debian"]

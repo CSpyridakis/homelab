@@ -1,0 +1,90 @@
+---
+# ====================================================================
+# Dependencies
+# ====================================================================
+
+- name: Ensure required packages for Grafana are installed
+  package:
+    name:
+      - apt-transport-https
+      - software-properties-common
+      - wget
+    state: present
+    update_cache: yes
+
+# ====================================================================
+# Keyring
+# ====================================================================
+
+- name: Ensure keyrings directory exists
+  file:
+    path: /etc/apt/keyrings/
+    state: directory
+    mode: '0755'
+
+- name: Download and import Grafana GPG key
+  ansible.builtin.get_url:
+    url: https://apt.grafana.com/gpg.key
+    dest: /tmp/grafana.key
+
+- name: Convert Grafana GPG key to keyring format
+  ansible.builtin.apt_key:
+    file: /tmp/grafana.key
+    state: present
+    keyring: /etc/apt/keyrings/grafana.gpg
+
+# ====================================================================
+# Repositories
+# ====================================================================
+
+- name: Add Grafana stable repository
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://apt.grafana.com stable main"
+    state: present
+    filename: grafana
+
+- name: Add Grafana beta repository
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://apt.grafana.com beta main"
+    state: present
+    filename: grafana
+
+# ====================================================================
+# Installation
+# ====================================================================
+
+- name: Install Grafana
+  package:
+    name: grafana
+    state: present
+    update_cache: yes
+
+# ====================================================================
+# Systemd
+# ====================================================================
+
+- name: Enable and start Grafana service
+  systemd:
+    name: grafana-server
+    enabled: yes
+    state: started
+
+# ====================================================================
+# Firewall
+# ====================================================================
+- name: Ensure UFW is installed and running
+  ansible.builtin.package:
+    name: ufw
+    state: present
+
+- name: Ensure UFW is enabled and running
+  ansible.builtin.systemd:
+    name: ufw
+    enabled: yes
+    state: started
+
+- name: Allow firewall port 9100 (grafana)
+  ansible.builtin.ufw:
+    rule: allow
+    port: 3000
+    proto: tcp
