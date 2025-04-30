@@ -8,20 +8,14 @@ Technologies used:
 <a href="https://www.pfsense.org/"><img style="height: 36px" src="doc/icons/PfSense_logo.png" alt="PfSense Logo" class="logo"></a> 
 <a href="https://nginxproxymanager.com/"><img style="height: 36px" src="doc/icons/nginx-proxy-manager.png" alt="nginx-proxy-manager Logo" class="logo"></a> 
 <a href="https://www.truenas.com/"><img style="height: 36px" src="doc/icons/Truenas.png" alt="Truenas Logo" class="logo"></a>
-<div style="background-color:inherit">
-    <a href="https://ollama.com/" style="background-color:inherit; color:inherit">
-        <img style="height: 40px; background-color:inherit" src="doc/icons/ollama-logo.png" alt="ollama Logo" class="logo">
-        <img style="height: 30px; background-color:inherit" src="doc/icons/ollama-text.png" alt="ollama text" class="logo">
-    </a> 
-</div> 
 <a href="https://about.gitea.com/"><img style="height: 36px" src="doc/icons/gitea.png" alt="gitea Logo" class="logo"></a>
- <!-- TODO: Work in progress -->
 <a href="https://openwrt.org/"><img style="height: 36px" src="doc/icons/openwrt-logo.png" alt="openwrt Logo" class="logo"></a> 
 <a href="https://www.terraform.io/"><img style="height: 36px" src="doc/icons/terraform.png" alt="terraform Logo" class="logo"></a> 
 <a href="https://docs.ansible.com/"><img style="height: 70px" src="doc/icons/ansible.png" alt="ansible Logo" class="logo"></a> 
 <a href="https://prometheus.io/"><img style="height: 43px" src="doc/icons/prometheus.png" alt="prometheus Logo" class="logo"></a> 
 <a href="https://grafana.com/"><img style="height: 36px" src="doc/icons/grafana-logo.png" alt="grafana Logo" class="logo"></a> 
 <a href="https://kubernetes.com/"><img style="height: 36px" src="doc/icons/Kubernetes_logo.svg" alt="kubernetes Logo" class="logo"></a> 
+<img style="height: 40px; background-color:inherit" src="doc/icons/ollama-logo.png" alt="ollama Logo" class="logo">
 
 ---
 
