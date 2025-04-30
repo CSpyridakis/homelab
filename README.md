@@ -1,6 +1,30 @@
 # 🏠 Homelab
 
+Technologies used:
+<a href="https://www.proxmox.com/en/"><img style="height: 36px" src="doc/icons/proxmox.png" alt="proxmox Logo" class="logo"></a> 
+<a href="https://www.portainer.io/"><img style="height: 36px" src="doc/icons/portainer.svg" alt="portainer Logo" class="logo"></a> 
+<a href="https://www.docker.com/"><img style="height: 36px" src="doc/icons/docker.png" alt="Docker Logo" class="logo"></a> 
+<a href="https://mikrotik.com/"><img style="height: 36px" src="doc/icons/mikrotik.png" alt="Mikrotik Logo" class="logo"></a> 
+<a href="https://www.pfsense.org/"><img style="height: 36px" src="doc/icons/PfSense_logo.png" alt="PfSense Logo" class="logo"></a> 
+<a href="https://nginxproxymanager.com/"><img style="height: 36px" src="doc/icons/nginx-proxy-manager.png" alt="nginx-proxy-manager Logo" class="logo"></a> 
+<a href="https://www.truenas.com/"><img style="height: 36px" src="doc/icons/Truenas.png" alt="Truenas Logo" class="logo"></a>
+<div style="background-color:inherit">
+    <a href="https://ollama.com/" style="background-color:inherit; color:inherit">
+        <img style="height: 40px; background-color:inherit" src="doc/icons/ollama-logo.png" alt="ollama Logo" class="logo">
+        <img style="height: 30px; background-color:inherit" src="doc/icons/ollama-text.png" alt="ollama text" class="logo">
+    </a> 
+</div> 
+<a href="https://about.gitea.com/"><img style="height: 36px" src="doc/icons/gitea.png" alt="gitea Logo" class="logo"></a>
+ <!-- TODO: Work in progress -->
+<a href="https://openwrt.org/"><img style="height: 36px" src="doc/icons/openwrt-logo.png" alt="openwrt Logo" class="logo"></a> 
+<a href="https://www.terraform.io/"><img style="height: 36px" src="doc/icons/terraform.png" alt="terraform Logo" class="logo"></a> 
+<a href="https://docs.ansible.com/"><img style="height: 70px" src="doc/icons/ansible.png" alt="ansible Logo" class="logo"></a> 
+<a href="https://prometheus.io/"><img style="height: 43px" src="doc/icons/prometheus.png" alt="prometheus Logo" class="logo"></a> 
+<a href="https://grafana.com/"><img style="height: 36px" src="doc/icons/grafana-logo.png" alt="grafana Logo" class="logo"></a> 
+<a href="https://kubernetes.com/"><img style="height: 36px" src="doc/icons/Kubernetes_logo.svg" alt="kubernetes Logo" class="logo"></a> 
+
 ---
+
 ## 🗒️ General Notes
 
 This repository serves as the primary documentation hub for my **Homelab**.
@@ -42,6 +66,11 @@ Below is a screenshot from `Winbox` that provides a general understanding of the
 
 ![Mikrotik Screenshot](./doc/mikrotik.png)
 
+## Access Points
+In my setup, I also have two different access points: one for the internal network and another for the external network. Both devices run [OpenWrt](https://openwrt.org/) to allow more granular configuration.
+
+![openwrt screenshot](./doc/openwrt.png)
+
 ## **Homelab** devices
 Having explained the interconnection of devices, this section will describe the actual devices used and their purpose.
 
@@ -71,6 +100,9 @@ Moreover, Nginx Proxy Manager is one of the containers that continuously runs on
 
 One option would be to define the hostnames of the services statically in the `/etc/hosts` file of my devices or in my router. However, this would require syncing this information between different machines and networks (if I decide to recreate a similar project elsewhere). For this reason, I chose to create a domain using [Duck DNS](https://www.duckdns.org/), which will have an `A record` that resolves to a private IP and can be updated once to run from everywhere. Finally, the option to create certificates using [Let's encrypt](https://letsencrypt.org/), which Nginx Proxy Manager provides, was used to add TLS for these services.
 
+In my setup I use [Duck DNS](https://www.duckdns.org/), hence, to gain a certificate, I have to follow this procedure.
+![gninx proxy manager ssl setup screenshot](./doc/npm-ssl.png)
+
 ![gninx proxy manager screenshot](./doc/nginx-proxy-manager.png)
 
 ##### C. Services
@@ -80,6 +112,20 @@ Finally, on my Proxmox node, I run some services directly. These services are no
 During my prompt experimentation, some modelfiles were created, which are available here: [https://github.com/CSpyridakis/modelfiles](https://github.com/CSpyridakis/modelfiles).
 
 ![ollama server screenshot](./doc/ollama-server.png)
+
+##### D. Kubernetes Cluster
+
+For experimentation and learning, I used [Terraform](https://developer.hashicorp.com/terraform) (see [this](./proxmox/terraform/) directory) to provision Proxmox and create multiple virtual machines. 
+
+These VMs are then configured using [Ansible](https://docs.ansible.com/) (see [this](./proxmox/ansible/) directory) to form a [Kubernetes](https://kubernetes.io/) cluster. To monitor the VMs, Ansible also sets up [Prometheus](https://prometheus.io/) and [Grafana](https://grafana.com/) to display metrics.
+
+Prometheus by default has its own UI which is available by visiting `http://[IP-DOMAIN]:9090`.
+
+![prometheus UI screenshot](./doc/prometheus-ui.png)
+
+Since the extracted metrics may lack sufficient detail, Grafana can be used to gain deeper insights into the system. After deployment, visit `http://[IP-or-DOMAIN]:3000` to access the Grafana dashboard.
+
+![Grafana UI screenshot](./doc/grafana.png)
 
 --- 
 
