@@ -1,0 +1,89 @@
+# ====================================================================
+# Create node_exporter user
+# ====================================================================
+
+- name: Create node_exporter user and group
+  ansible.builtin.user:
+    name: node_exporter
+    system: yes
+    state: present
+    shell: /usr/sbin/nologin
+    # create_home: yes
+
+# ====================================================================
+#  Download, extract and 'install' node_exporter
+# ====================================================================
+
+- name: Download node_exporter binary
+  ansible.builtin.get_url:
+    url: "https://github.com/prometheus/node_exporter/releases/download/v{{ node_exporter_version }}/node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz"
+    dest: /tmp/node_exporter.tar.gz
+    mode: '0644'
+
+- name: Extract node_exporter
+  ansible.builtin.unarchive:
+    src: /tmp/node_exporter.tar.gz
+    dest: /opt/
+    remote_src: yes
+
+- name: Copy node_exporter binary to /usr/local/bin with proper ownership and permissions
+  ansible.builtin.copy:
+    src: /opt/node_exporter-{{ node_exporter_version }}.linux-amd64/node_exporter
+    dest: /usr/local/bin/node_exporter
+    owner: node_exporter
+    group: node_exporter
+    mode: '0755'
+    remote_src: yes
+    force: yes
+
+# ====================================================================
+# Create systemd service which will start node_exporter
+# ====================================================================
+
+- name: Create systemd service file for node_exporter
+  ansible.builtin.copy:
+    dest: /etc/systemd/system/node_exporter.service
+    content: |
+      [Unit]
+      Description=Prometheus Node Exporter
+      After=network.target
+
+      [Service]
+      User=node_exporter
+      Group=node_exporter
+      ExecStart=/usr/local/bin/node_exporter
+
+      [Install]
+      WantedBy=multi-user.target
+    mode: '0644'
+
+- name: Reload systemd daemon
+  systemd:
+    daemon_reload: yes
+    
+- name: Enable and start node_exporter service
+  ansible.builtin.systemd:
+    name: node_exporter
+    enabled: yes
+    state: started
+    daemon_reload: yes
+
+# ====================================================================
+# Firewall
+# ====================================================================
+- name: Ensure UFW is installed and running
+  ansible.builtin.package:
+    name: ufw
+    state: present
+
+- name: Ensure UFW is enabled and running
+  ansible.builtin.systemd:
+    name: ufw
+    enabled: yes
+    state: started
+
+- name: Allow firewall port 9100 (node_exporter)
+  ansible.builtin.ufw:
+    rule: allow
+    port: 9100
+    proto: tcp

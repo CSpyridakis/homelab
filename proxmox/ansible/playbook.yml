@@ -20,6 +20,10 @@
         name: k8s-node
       when: ansible_distribution in ["Ubuntu", "Debian"]
 
+    - name: Include prometheus-agent role
+      include_role:
+        name: prometheus-agent
+      when: ansible_distribution in ["Ubuntu", "Debian"]
 # ====================================================================
 # Prometheus and Grafana server
 # ====================================================================
