@@ -9,6 +9,18 @@
     - base
 
 # ====================================================================
+# All K8s nodes (workers + masters)
+# ====================================================================
+- name: Configure Kubernetes nodes (control plane + workers)
+  hosts: k8s
+  become: true
+  tasks:
+    - name: Include k8s-node role
+      include_role:
+        name: k8s-node
+      when: ansible_distribution in ["Ubuntu", "Debian"]
+
+# ====================================================================
 # Prometheus and Grafana server
 # ====================================================================
 - name: Configure monitoring server
