@@ -12,9 +12,9 @@ output "vm_public_key" {
   value = tls_private_key.vm_key.public_key_openssh
 }
 
-output "vm_ipv4_address" {
-  value = proxmox_virtual_environment_vm.vm.ipv4_addresses
-}
+# output "vm_ipv4_address" {
+#   value = proxmox_virtual_environment_vm.vm[count.index].ipv4_addresses
+# }
 
 output "admin_password" {
   value = resource.bcrypt_hash.admin.id

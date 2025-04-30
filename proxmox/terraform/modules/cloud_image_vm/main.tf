@@ -47,11 +47,13 @@ resource "bcrypt_hash" "admin" {
 # ===================================================
 
 resource "proxmox_virtual_environment_vm" "vm" {
+  count       = var.num_of_created_vms
+
   # -------------------------------------
   # Initial setup
   node_name   = var.vm_node
-  name        = var.vm_name
-  vm_id       = var.vm_id
+  name        = "${var.vm_name}-${count.index}"
+  vm_id       = var.vm_id + count.index
   on_boot     = var.vm_on_boot
   description = "Terraform-managed VM"
   tags        = ["terraform", "cloudinit"]
@@ -59,7 +61,7 @@ resource "proxmox_virtual_environment_vm" "vm" {
   # -------------------------------------
   # Qemu agent
   agent {
-    enabled = true
+    enabled = false # Enable only when qemu-guest-agent is installed
   }
   stop_on_destroy = true
 

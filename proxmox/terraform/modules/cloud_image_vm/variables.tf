@@ -65,6 +65,7 @@ variable "admin_password" {
   description = "Admin password"
   type        = string
   sensitive   = true
+  default     = "change-me"
 }
 
 variable "vm_node" {
@@ -81,6 +82,12 @@ variable "vm_name" {
 variable "vm_id" {
   description = "ID of the VM"
   type        = number
+}
+
+variable "num_of_created_vms" {
+  description = "How many VMs to create"
+  type        = number
+  default     = 1
 }
 
 variable "vm_user" {
