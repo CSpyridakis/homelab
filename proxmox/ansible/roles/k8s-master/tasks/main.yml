@@ -1,0 +1,66 @@
+# ====================================================================
+#  Container Network Interface (CNI)
+# ====================================================================
+# TODO
+
+# ====================================================================
+# Install Helm
+# ====================================================================
+- name: Download Helm installation script
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+    dest: /tmp/get-helm-3
+    mode: '0755'
+
+- name: Install Helm using the downloaded script
+  ansible.builtin.shell: '/tmp/get-helm-3'
+  become: true
+
+# ====================================================================
+# K8s Configuration
+# ====================================================================
+
+# - name: Create k8s user
+#   ansible.builtin.user:
+#     name: k8s
+#     state: present
+#     shell: /bin/bash
+
+# - name: Ensure k8s user has root access
+#   ansible.builtin.user:
+#     name: k8s
+#     append: yes
+#     groups: sudo
+
+# - name: Create .kube directory in k8s user's home
+#   ansible.builtin.file:
+#     path: "/home/k8s/.kube"
+#     state: directory
+#     owner: k8s
+#     group: k8s
+#     mode: '0700'
+
+- name: Copy kubeconfig from local files to k8s user's home
+  ansible.builtin.copy:
+    src: files/kubernetes.conf
+    dest: "/etc/kubernetes/admin.conf"
+    # owner: k8s
+    # group: k8s
+    # mode: '0644'
+
+# - name: Run kubeadm init user with sudo privileges
+#   become: true
+#   ansible.builtin.command: kubeadm init
+#   register: kubeadm_init_output
+#   changed_when: "'Your Kubernetes control-plane has initialized successfully' in kubeadm_init_output.stdout"
+
+# - name: Get join command
+#   become: true
+#   ansible.builtin.command: kubeadm token create --print-join-command
+#   register: join_command_output
+#   changed_when: false
+
+# - name: Set join command as fact
+#   ansible.builtin.set_fact:
+#     kube_join_command: "{{ join_command_output.stdout }}"
+#     cacheable: true

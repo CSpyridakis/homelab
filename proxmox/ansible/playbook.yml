@@ -24,6 +24,19 @@
       include_role:
         name: prometheus-agent
       when: ansible_distribution in ["Ubuntu", "Debian"]
+
+# ====================================================================
+# Only K8s master nodes
+# ====================================================================
+- name: Configure Kubernetes master nodes
+  hosts: k8s-masters
+  become: true
+  tasks:
+    - name: Include k8s-master role
+      include_role:
+        name: k8s-master
+      when: ansible_distribution in ["Ubuntu", "Debian"]
+
 # ====================================================================
 # Only K8s worker nodes
 # ====================================================================
