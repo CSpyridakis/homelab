@@ -1,0 +1,119 @@
+# ====================================================================
+# Create prometheus user
+# ====================================================================
+
+- name: Create prometheus user
+  ansible.builtin.user:
+    name: prometheus
+    system: yes
+    state: present
+    shell: /usr/sbin/nologin
+    # create_home: yes
+
+# ====================================================================
+#  Download, extract and 'install' Prometheus
+# ====================================================================
+
+- name: Download Prometheus binary
+  ansible.builtin.get_url:
+    url: "https://github.com/prometheus/prometheus/releases/download/v{{ prometheus_version }}/prometheus-{{ prometheus_version }}.linux-amd64.tar.gz"
+    dest: "/tmp/prometheus-{{ prometheus_version }}.tar.gz"
+    mode: '0644'
+
+- name: Extract Prometheus binaries
+  ansible.builtin.unarchive:
+    src: "/tmp/prometheus-{{ prometheus_version }}.tar.gz"
+    dest: "/opt"
+    remote_src: yes
+
+- name: Copy Prometheus binaries to /usr/local/bin
+  ansible.builtin.copy:
+    src: /opt/prometheus-{{ prometheus_version }}.linux-amd64/{{ item }}
+    dest: /usr/local/bin/{{ item }}
+    owner: prometheus
+    group: prometheus
+    mode: '0755'
+    remote_src: yes
+    force: yes
+  loop:
+    - prometheus
+    - promtool
+
+# ====================================================================
+#  Prometheus configuration file 
+# ====================================================================
+
+- name: Create Prometheus config directory
+  ansible.builtin.file:
+    path: /etc/prometheus
+    state: directory
+    owner: prometheus
+    group: prometheus
+    mode: '0755'
+
+- name: Deploy Prometheus configuration file
+  ansible.builtin.template:
+    src: prometheus.yml.j2
+    dest: /etc/prometheus/prometheus.yml
+    owner: prometheus
+    group: prometheus
+    mode: '0644'
+
+- name: Create Prometheus data directory
+  ansible.builtin.file:
+    path: /data
+    state: directory
+    owner: prometheus
+    group: prometheus
+    mode: '0755'
+
+# ====================================================================
+#  Create systemd service which will start Prometheus
+# ====================================================================
+
+- name: Create Prometheus systemd service
+  ansible.builtin.copy:
+    dest: /etc/systemd/system/prometheus.service
+    content: |
+      [Unit]
+      Description=Prometheus Server
+      After=network.target
+
+      [Service]
+      User=prometheus
+      Group=prometheus
+      WorkingDirectory=/data
+      ExecStart=/usr/local/bin/prometheus \
+        --config.file=/etc/prometheus/prometheus.yml \
+        --storage.tsdb.path=/data
+
+      [Install]
+      WantedBy=multi-user.target
+    mode: '0644'
+
+- name: Enable and start Prometheus service
+  ansible.builtin.systemd:
+    name: prometheus
+    enabled: yes
+    state: started
+    daemon_reload: yes
+
+# ====================================================================
+# Firewall
+# ====================================================================
+- name: Ensure UFW is installed and running
+  ansible.builtin.package:
+    name: ufw
+    state: present
+
+- name: Ensure UFW is enabled and running
+  ansible.builtin.systemd:
+    name: ufw
+    enabled: yes
+    state: started
+
+- name: Allow firewall port 9090 (prometheus ui)
+  ansible.builtin.ufw:
+    rule: allow
+    port: 9090
+    proto: tcp

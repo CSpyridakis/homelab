@@ -15,6 +15,10 @@
   hosts: prometheus-grafana-server
   become: true
   tasks:
+    - name: Include prometheus-server role
+      include_role:
+        name: prometheus-server
+      when: ansible_distribution in ["Ubuntu", "Debian"]
 
     - name: Include grafana-server role
       include_role:
