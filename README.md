@@ -80,7 +80,7 @@ To leverage the Nvidia GPU that my main server accommodates, actions were also t
 ![proxmox screenshot](./doc/proxmox.png)
 
 ##### 🖥️🖥️ A. Virtual Machines
-Using Proxmox, different VMs can be easily created, and services can be deployed on them to run experiments that follow [IaaS](https://en.wikipedia.org/wiki/Infrastructure_as_a_service) principles before continuing development or production activities in other infrastructures, whether private or public.
+Using Proxmox, different VMs can be easily created, and services can be deployed on them to run experiments that follow [IaaS](https://en.wikipedia.org/wiki/Infrastructure_as_a_service) principles before continuing development or production activities in other infrastructures, whether private or public. Some of these VMs are behind a firewall, to be more specific a virtual pfsense deployed as a VM in the Proxmox server, to be able to communicate in their internal subnets.
 
 ##### 🐳 B. Portainer
 One of my needs is related to container deployment. [Portainer](https://www.portainer.io/) is a widely used container management software; for this reason, Portainer is also deployed as an LXC and provides container management services when I need to test individual containers that are not part of a Kubernetes cluster or run services required in my network.
@@ -161,3 +161,10 @@ Finally, for applications that require an embedded Linux system equipped with a 
 ![jetson nano info](./doc/jetson-nano.png)
 
 --- 
+
+## Future goals
+- Create an automated BU mechanism
+- Migrate to immich
+- Deploy Portainer stacks into the Kubernetes Cluster
+- Increase the number of physical devices & Cluster Proxmox
+- High Availability 
