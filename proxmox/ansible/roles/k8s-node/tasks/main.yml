@@ -10,6 +10,40 @@
       - curl
 
 # ====================================================================
+# Firewall
+# ====================================================================
+- name: Ensure UFW is installed and running
+  ansible.builtin.package:
+    name: ufw
+    state: present
+
+- name: Ensure UFW is enabled and running
+  ansible.builtin.systemd:
+    name: ufw
+    enabled: yes
+    state: started
+
+- name: Allow firewall port 6443
+  ansible.builtin.ufw:
+    rule: allow
+    port: "{{ item }}"
+    proto: tcp
+  loop:
+    - 6443    # Kubernetes API server
+    - 2379    # etcd client API
+    - 2380    # etcd server API
+    - 10250   # Kubelet API
+    - 10257   # kube-controller-manager
+    - 10259   # kube-scheduler
+    - 10256   # kube-proxy
+
+- name: Allow NodePort services (30000-32767)
+  ufw:
+    rule: allow
+    port: 30000:32767
+    proto: tcp
+
+# ====================================================================
 # Disable swap
 # ====================================================================
 
