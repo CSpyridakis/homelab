@@ -1,11 +1,53 @@
+
+# ====================================================================
+# Master Initialization
+# ====================================================================
+
+- name: Run kubeadm init
+  become: true
+  ansible.builtin.command: kubeadm init --apiserver-advertise-address {{ ansible_host }} --pod-network-cidr "10.244.0.0/16" --upload-certs
+  register: kubeadm_init_output
+  changed_when: "'Your Kubernetes control-plane has initialized successfully' in kubeadm_init_output.stdout"
+
+- name: kubeadm initalization
+  debug:
+    msg: "{{ kubeadm_init_output }}"
+
+# ====================================================================
+# K8s Configuration
+# ====================================================================
+
+- name: Create .kube directory in k8s user's home
+  ansible.builtin.file:
+    path: "/home/{{ ansible_user }}/.kube"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0755'
+
+- name: Copy kubeconfig from local files to k8s user's home
+  ansible.builtin.copy:
+    src: "/etc/kubernetes/admin.conf"
+    dest: "/home/{{ ansible_user }}/.kube/config"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0644'
+    remote_src: yes
+
 # ====================================================================
 #  Container Network Interface (CNI)
 # ====================================================================
-# TODO
+
+- name: Install Calico network plugin
+  ansible.builtin.command:
+    cmd: kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+  environment:
+    KUBECONFIG: "/home/{{ ansible_user }}/.kube/config"
 
 # ====================================================================
 # Install Helm
 # ====================================================================
+
 - name: Download Helm installation script
   ansible.builtin.get_url:
     url: https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
@@ -17,50 +59,20 @@
   become: true
 
 # ====================================================================
-# K8s Configuration
+#  Join worker nodes command
 # ====================================================================
 
-# - name: Create k8s user
-#   ansible.builtin.user:
-#     name: k8s
-#     state: present
-#     shell: /bin/bash
+- name: Get join command
+  become: true
+  ansible.builtin.command: kubeadm token create --print-join-command
+  register: join_command_output
+  changed_when: true
 
-# - name: Ensure k8s user has root access
-#   ansible.builtin.user:
-#     name: k8s
-#     append: yes
-#     groups: sudo
+- name: Join command
+  debug:
+    msg: "{{ join_command_output }}"
 
-# - name: Create .kube directory in k8s user's home
-#   ansible.builtin.file:
-#     path: "/home/k8s/.kube"
-#     state: directory
-#     owner: k8s
-#     group: k8s
-#     mode: '0700'
-
-- name: Copy kubeconfig from local files to k8s user's home
-  ansible.builtin.copy:
-    src: files/kubernetes.conf
-    dest: "/etc/kubernetes/admin.conf"
-    # owner: k8s
-    # group: k8s
-    # mode: '0644'
-
-# - name: Run kubeadm init user with sudo privileges
-#   become: true
-#   ansible.builtin.command: kubeadm init
-#   register: kubeadm_init_output
-#   changed_when: "'Your Kubernetes control-plane has initialized successfully' in kubeadm_init_output.stdout"
-
-# - name: Get join command
-#   become: true
-#   ansible.builtin.command: kubeadm token create --print-join-command
-#   register: join_command_output
-#   changed_when: false
-
-# - name: Set join command as fact
-#   ansible.builtin.set_fact:
-#     kube_join_command: "{{ join_command_output.stdout }}"
-#     cacheable: true
+- name: Set join command as fact
+  ansible.builtin.set_fact:
+    kube_join_command: "{{ join_command_output.stdout }}"
+    cacheable: true

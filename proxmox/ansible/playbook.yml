@@ -29,7 +29,7 @@
 # Only K8s master nodes
 # ====================================================================
 - name: Configure Kubernetes master nodes
-  hosts: k8s-masters
+  hosts: k8s-masters[0]
   become: true
   tasks:
     - name: Include k8s-master role

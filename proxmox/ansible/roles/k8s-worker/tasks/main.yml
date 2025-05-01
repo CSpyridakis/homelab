@@ -1,4 +1,13 @@
+# ====================================================================
+#  Join cluster
+# ====================================================================
 
-# - name: Join worker to the cluster
-#   become: true
-#   ansible.builtin.command: "{{ hostvars['masters[0]']['kube_join_command'] }}"
+- name: Debug join command
+  debug:
+    msg: "{{ hostvars[groups['k8s-masters'][0]]['kube_join_command'] }}"
+  when: groups['k8s-masters'] is defined and groups['k8s-masters'] | length > 0
+
+- name: Join worker to the cluster
+  become: true
+  ansible.builtin.command: "{{ hostvars[groups['k8s-masters'][0]]['kube_join_command'] }}"
+  when: groups['k8s-masters'] is defined and groups['k8s-masters'] | length > 0
