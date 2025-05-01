@@ -1,2 +1,2 @@
-
+ansible_host: 
 machine_hostname: k8s-worker-2
