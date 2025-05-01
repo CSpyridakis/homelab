@@ -8,7 +8,6 @@
     system: yes
     state: present
     shell: /usr/sbin/nologin
-    # create_home: yes
 
 # ====================================================================
 #  Download, extract and 'install' node_exporter
@@ -56,10 +55,6 @@
       [Install]
       WantedBy=multi-user.target
     mode: '0644'
-
-- name: Reload systemd daemon
-  systemd:
-    daemon_reload: yes
     
 - name: Enable and start node_exporter service
   ansible.builtin.systemd:

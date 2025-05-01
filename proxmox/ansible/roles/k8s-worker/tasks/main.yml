@@ -1,7 +1,4 @@
-- name: Print a custom message
-  debug:
-    msg: "hello k8s worker"
-  
+
 # - name: Join worker to the cluster
 #   become: true
-#   ansible.builtin.command: "{{ hostvars['master_node_1']['kube_join_command'] }}"
+#   ansible.builtin.command: "{{ hostvars['masters[0]']['kube_join_command'] }}"

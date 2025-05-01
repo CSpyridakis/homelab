@@ -3,7 +3,7 @@
 # ====================================================================
 
 - name: Ensure dependencies are installed
-  package:
+  ansible.builtin.package:
     update_cache: yes
     state: present
     name:  
@@ -41,7 +41,7 @@
 # ====================================================================
 
 - name: Install containerd
-  package:
+  ansible.builtin.package:
     name: containerd
     state: present
     update_cache: yes
@@ -66,12 +66,12 @@
     group: root
     mode: '0644'
 
-- name: Enable SystemdCgroup in containerd config
+- name: Enable Systemd Cgroup in containerd config
   ansible.builtin.replace:
     path: /etc/containerd/config.toml
-    regexp: '^SystemdCgroup = false'
-    replace: 'SystemdCgroup = true'
-    backup: yes  
+    regexp: '^(\s*)SystemdCgroup\s*=\s*false'
+    replace: '\1SystemdCgroup = true'
+  become: true
 
 - name: Restart and enable containerd
   systemd:
@@ -85,7 +85,7 @@
 # ====================================================================
 
 - name: Ensure dependencies are installed
-  package:
+  ansible.builtin.package:
     update_cache: yes
     state: present
     name:
@@ -95,14 +95,14 @@
       - gpg
 
 - name: Ensure keyrings directory exists
-  file:
+  ansible.builtin.file:
     path: /etc/apt/keyrings/
     state: directory
     mode: '0755'
 
 - name: Download Kubernetes Release key
   ansible.builtin.get_url:
-    url: https://pkgs.k8s.io/core:/stable:/v1.33/deb/Release.key
+    url: "https://pkgs.k8s.io/core:/stable:/v{{ kubernetes_version }}/deb/Release.key"
     dest: /tmp/kubernetes-Release.key
 
 - name: Add Kubernetes Release key to apt keyring
@@ -113,12 +113,12 @@
 
 - name: Add Kubernetes apt repository
   ansible.builtin.apt_repository:
-    repo: deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.33/deb/ /
+    repo: deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v{{ kubernetes_version }}/deb/ /
     state: present
     filename: kubernetes
 
 - name: Install Kubernetes components
-  package:
+  ansible.builtin.package:
     name:
       - kubelet
       - kubeadm
@@ -155,18 +155,18 @@
 # ====================================================================
 
 - name: Enable IP forwarding temporarily
-  sysctl:
+  ansible.builtin.sysctl:
     name: net.ipv4.ip_forward
     value: '1'
     state: present
     reload: yes
 
 - name: Ensure IP forwarding is enabled permanently
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/sysctl.conf
     line: 'net.ipv4.ip_forward = 1'
     create: yes
     state: present
 
 - name: Apply sysctl settings
-  command: sysctl -p
+  ansible.builtin.command: sysctl -p

@@ -1,6 +1,26 @@
+# ====================================================================
+#  Install packages
+# ====================================================================
 - name: Install packages
   package:
     update_cache: yes
     name:  "{{ item }}"
   loop:
     - curl
+
+# ====================================================================
+#  Set hostname
+# ====================================================================
+- name: Set system hostname
+  ansible.builtin.hostname:
+    name: "{{ machine_hostname }}"
+
+# ====================================================================
+#  Set hosts
+# ====================================================================
+- name: Add all hosts to /etc/hosts
+  lineinfile:
+    path: /etc/hosts
+    line: "{{ hostvars[item].ansible_host }} {{ hostvars[item].machine_hostname }}"
+    state: present
+  loop: "{{ groups['all'] }}"
