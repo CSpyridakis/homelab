@@ -168,3 +168,13 @@ Finally, for applications that require an embedded Linux system equipped with a 
 - Deploy Portainer stacks into the Kubernetes Cluster
 - Increase the number of physical devices & Cluster Proxmox
 - High Availability 
+
+---
+
+## ⚖️ Legal Notice
+
+All product names, logos, brands, trademarks, and registered trademarks mentioned or displayed in this repository are the property of their respective owners. They are used here solely for identification and descriptive purposes, to name the technologies involved in this Homelab.
+
+Their use does **not** imply any affiliation with, endorsement by, or sponsorship from the respective trademark holders. This project is not associated with any of these companies or organizations in any way. All rights are reserved by their respective owners.
+
+The original content of this repository — including the configurations, documentation, code, and the particular way these technologies are integrated and used together — is the work of this project and is licensed under the [MIT License](./LICENSE). The trademarks themselves remain the property of their respective owners and are excluded from this license.
