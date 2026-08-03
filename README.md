@@ -19,6 +19,23 @@ Technologies used:
 
 ---
 
+## 📑 Table of Contents
+
+- [General Notes](#-general-notes)
+- [Network Diagram](#-network-diagram)
+- [Routers](#-routers)
+- [Access Points](#access-points)
+- [Homelab devices](#homelab-devices)
+  - [Main Server](#-1-main-server)
+  - [Network attached storage (NAS)](#-2-network-attached-storage-nas)
+  - [Intel NUC](#3-intel-nuc)
+  - [Raspberry PI](#4-raspberry-pi)
+  - [Jetson Nano](#5-jetson-nano)
+- [Future goals](#future-goals)
+- [Legal Notice](#-legal-notice)
+
+---
+
 ## 🗒️ General Notes
 
 This repository serves as the primary documentation hub for my **Homelab**.
