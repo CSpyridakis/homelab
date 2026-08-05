@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ittools
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ittools
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ittools
+    spec:
+      containers:
+        - name: ittools
+          image: corentinth/it-tools:latest
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              memory: 1G
