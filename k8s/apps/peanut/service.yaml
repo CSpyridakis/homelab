@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: peanut
+spec:
+  type: NodePort  # TODO: remove this after proxy addition
+  selector:
+    app.kubernetes.io/name: peanut
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+      nodePort: 30024 # TODO: remove this after proxy addition

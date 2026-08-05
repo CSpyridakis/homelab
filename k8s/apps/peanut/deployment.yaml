@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: peanut
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: peanut
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: peanut
+    spec:
+      containers:
+        - name: peanut
+          image: brandawg93/peanut:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: NUT_HOST
+              value: "nut.local"
+            - name: NUT_PORT
+              value: "3493"
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              memory: 500Mi
