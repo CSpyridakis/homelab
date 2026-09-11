@@ -7,10 +7,18 @@ metadata:
   namespace: applications
 spec:
   ports:
-  - port: 5000
+  # HTTP
+  # - name: http
+  #   port: 5000
+  #   protocol: TCP
+  #   targetPort: 5000
+  #   nodePort: 30432
+  # TLS
+  - name: https
+    port: 8971
     protocol: TCP
-    targetPort: 5000
-    nodePort: 30432
+    targetPort: 8971
+    nodePort: 30435
   selector:
     app: frigate
   type: NodePort
