@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: frigate
+  name: frigate
+  namespace: applications
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frigate
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: frigate
+    spec:
+      # -----------------------------------
+      # Init Containers
+      # -----------------------------------
+      # Containers
+      initContainers:
+      - name: initiliazation
+        image: busybox
+        args:
+        - sh
+        - -c
+        - cp /config-ro/config.yaml /config-rw/
+        volumeMounts:
+        - name: frigate-config-ro
+          mountPath: "/config-ro"
+        - name: frigate-config-rw
+          mountPath: "/config-rw"
+      # -----------------------------------
+      # Containers
+      # -----------------------------------
+      containers:
+      - name: frigate
+        image: ghcr.io/blakeblackshear/frigate:0.17.2 
+        # Ports
+        ports:
+        - containerPort: 1883
+        - containerPort: 5000
+        # Secret values
+        envFrom:
+        - secretRef:
+            name: frigate-secrets
+        # Configuration  
+        volumeMounts:
+        - name: frigate-media
+          mountPath: /media/frigate
+        - name: frigate-config-rw
+          mountPath: "/config"
+        # Resources
+        resources:
+          limits:
+            cpu: "2500m"
+            memory: "3Gi"
+      # --------------------------------
+      # Volumes
+      # --------------------------------
+      volumes:
+      - name: frigate-media
+        emptyDir:
+          sizeLimit: 5G
+      # Will read from here the config map
+      - name: frigate-config-ro
+        configMap:
+          name: frigate-config
+     # And will store here for as read-write for the duration that exist
+      - name: frigate-config-rw
+        emptyDir:
+          sizeLimit: 1G

@@ -1,0 +1,80 @@
+mqtt:
+  enabled: false
+
+# Config schema version — match Frigate 0.17.x
+version: 0.17-0
+
+# Global ffmpeg settings applied to all cameras
+ffmpeg:
+  # Auto-detect hardware decoder (VAAPI / Intel QSV / Nvidia).
+  # Offloads video decode from CPU. Check docker logs to confirm which was picked.
+  hwaccel_args: auto
+
+# Global recording — continuous, required for review + notification clips
+record:
+  enabled: true
+  continuous:
+    days: 14            # keep ALL footag
+  alerts:
+    retain:
+      days: 14         # alert clips kept longer
+  detections:
+    retain:
+      days: 14
+
+# -----------------------------------------------------------------------
+# Cameras
+# -----------------------------------------------------------------------
+
+  home_camera: # <------ Name of the camera
+    enabled: true
+    ffmpeg:
+      inputs:
+        # Full-res main stream — recording only
+        - path: "rtsp://{FRIGATE_CMR_HOME_RTSP_USER}:{FRIGATE_CMR_HOME_RTSP_PASS}@{FRIGATE_CMR_HOME_IP}:{FRIGATE_CMR_HOME_RTSP_PORT}/stream1"
+          roles:
+            - record
+        # Low-res sub stream — detection
+        - path: "rtsp://{FRIGATE_CMR_HOME_RTSP_USER}:{FRIGATE_CMR_HOME_RTSP_PASS}@{FRIGATE_CMR_HOME_IP}:{FRIGATE_CMR_HOME_RTSP_PORT}/stream2"
+          roles:
+            - detect
+      # Fix sending frames with broken timestamps
+      input_args:
+        - -rtsp_transport
+        - tcp
+        - -fflags
+        - +genpts+discardcorrupt
+        - -use_wallclock_as_timestamps
+        - "1"
+    detect:
+      enabled: false
+      width: 1280      # MUST match real /stream2 resolution
+      height: 720
+      fps: 20
+    onvif:
+      host: "{FRIGATE_CMR_HOME_IP}"
+      port: 2020
+      user: "{FRIGATE_CMR_HOME_ONVIF_USER}"
+      password: "{FRIGATE_CMR_HOME_ONVIF_PASS}"
+  
+    # Ignore motion in this region (e.g. timestamp overlay / sky)
+    motion:
+      mask: 0,0.061,0.318,0.059,0.316,0,1,0,1,1,0,1
+    notifications:
+      enabled: true
+
+# -----------------------------------------------------------------------
+# Remaining
+# -----------------------------------------------------------------------
+
+# UI camera groups
+camera_groups:
+  My_Home:
+    order: 1
+    icon: LuLandmark
+    cameras: home_camera
+
+# Global notifications
+notifications:
+  enabled: true
+  email: "{FRIGATE_USER_EMAIL}"
