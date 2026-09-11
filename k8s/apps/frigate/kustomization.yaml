@@ -1,8 +1,12 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-resources: 
+resources:
 - configmap.yml
 - secret.yml
 - service.yml
-- deploy.yml 
+- pv-config.yml
+- pv-data.yml
+- pvc-config.yml
+- pvc-data.yml
+- deploy.yml

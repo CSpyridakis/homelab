@@ -4,7 +4,7 @@ metadata:
   labels:
     app: frigate
   name: frigate
-  namespace: applications
+  namespace: applications # TODO: Check if this is the proper ns
 spec:
   replicas: 1
   selector:
@@ -61,14 +61,16 @@ spec:
       # Volumes
       # --------------------------------
       volumes:
+      # Media/data: persisted on the data PVC
       - name: frigate-media
-        emptyDir:
-          sizeLimit: 5G
-      # Will read from here the config map
+        persistentVolumeClaim:
+          claimName: frigate-data
+      # Read-only initial config from the config map
       - name: frigate-config-ro
         configMap:
           name: frigate-config
-     # And will store here for as read-write for the duration that exist
+      # Writable config: persisted on the config PVC
+      # (init container seeds config.yaml into it from the config map)
       - name: frigate-config-rw
-        emptyDir:
-          sizeLimit: 1G
+        persistentVolumeClaim:
+          claimName: frigate-config

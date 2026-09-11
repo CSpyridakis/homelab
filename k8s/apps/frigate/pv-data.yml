@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: frigate-data-pv
+  namespace: applications # TODO: Check if this is the proper ns
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: manual
+  # FIXME: Make this more rubust
+  hostPath:
+    path: /data/frigate/media
