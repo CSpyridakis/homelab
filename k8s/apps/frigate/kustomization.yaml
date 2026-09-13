@@ -3,12 +3,36 @@ kind: Kustomization
 
 namespace: privileged-apps
 
+# =========================================================
+# Resources
+# =========================================================
+
 resources:
-- configmap.yaml
-- secret.yaml
 - service.yaml
 - pv-config.yaml
 - pv-data.yaml
 - pvc-config.yaml
 - pvc-data.yaml
 - deploy.yaml
+
+# =========================================================
+# Configs
+# =========================================================
+
+configMapGenerator:
+- name: frigate-config
+  files:
+  - config.yaml=config/config.yaml
+  options:
+    disableNameSuffixHash: true
+
+# =========================================================
+# Secrets
+# =========================================================
+
+secretGenerator:
+- name: frigate-secrets
+  envs:
+  - config/.env
+  options:
+    disableNameSuffixHash: true
