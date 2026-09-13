@@ -1,12 +1,14 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
+namespace: privileged-apps
+
 resources:
-- configmap.yml
-- secret.yml
-- service.yml
-- pv-config.yml
-- pv-data.yml
-- pvc-config.yml
-- pvc-data.yml
-- deploy.yml
+- configmap.yaml
+- secret.yaml
+- service.yaml
+- pv-config.yaml
+- pv-data.yaml
+- pvc-config.yaml
+- pvc-data.yaml
+- deploy.yaml

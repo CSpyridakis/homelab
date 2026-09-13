@@ -4,18 +4,25 @@ metadata:
   labels:
     app: frigate
   name: frigate
-  namespace: applications # TODO: Check if this is the proper ns
 spec:
+  # =========================================================
+  # Deployment specific
+  # =========================================================
   replicas: 1
   selector:
     matchLabels:
       app: frigate
   strategy: {}
+
+  # =========================================================
+  # Template
+  # =========================================================
   template:
     metadata:
       labels:
         app: frigate
     spec:
+
       # -----------------------------------
       # Init Containers
       # -----------------------------------
@@ -23,21 +30,32 @@ spec:
       initContainers:
       - name: initiliazation
         image: busybox
+        securityContext:
+          allowPrivilegeEscalation: true
+          capabilities:
+            drop: ["ALL"]
         args:
         - sh
         - -c
-        - cp /config-ro/config.yaml /config-rw/
+        - cp -f /config-ro/config.yaml /config-rw/
         volumeMounts:
         - name: frigate-config-ro
           mountPath: "/config-ro"
         - name: frigate-config-rw
           mountPath: "/config-rw"
+    
       # -----------------------------------
       # Containers
       # -----------------------------------
       containers:
       - name: frigate
         image: ghcr.io/blakeblackshear/frigate:0.17.2 
+        securityContext:
+          # For this case, due to: /package/admin/s6-overlay/libexec/preinit: 
+          # fatal: /run belongs to uid 0 instead of 1000, has insecure and/or 
+          # unworkable permissions, and we're lacking the privileges to fix it.
+          # Is required for now
+          allowPrivilegeEscalation: true
         # Ports
         ports:
         - containerPort: 1883
@@ -57,6 +75,7 @@ spec:
           limits:
             cpu: "2500m"
             memory: "3Gi"
+
       # --------------------------------
       # Volumes
       # --------------------------------

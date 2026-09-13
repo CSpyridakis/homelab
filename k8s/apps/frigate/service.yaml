@@ -4,7 +4,6 @@ metadata:
   labels:
     app: frigate
   name: frigate
-  namespace: applications # TODO: Check if this is the proper ns
 spec:
   ports:
   # HTTP
